@@ -194,6 +194,45 @@ public class CouponCtrollerTest {
 	}
 	
 	/**
+	 * 쿠폰만료대상정보조회
+	 * @return
+	 */
+	@GetMapping("cp/getExprdCouponLst/{vrEdDt}")
+	public String getExprdCouponLst(@PathVariable String vrEdDt) {
+		List<CouponIssue> couponIssueLst = couponIssueRepository.findAll();
+		String rsltStr = "";
+		
+		if(vrEdDt == null|| vrEdDt.isEmpty()) {
+			Calendar cd = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat ( "yyyy-MM-dd");
+			vrEdDt = sdf.format(cd.getTime());
+			
+		}
+		
+		if(couponIssueLst == null || couponIssueLst.isEmpty() ) {
+			return "발급된 쿠폰정보가 없습니다.";
+		}
+		
+		for (CouponIssue couponIssue : couponIssueLst) {
+			//사용가능하고 만기일자가 입력값과 동일한 목록 추출
+			if(CouponStatCd.USE_PSBL.equals(couponIssue.getCoupon().getCouponStatCd()) && vrEdDt.equals(couponIssue.getCoupon().getVrEdDt())) {
+				if(rsltStr.isEmpty()) {
+					rsltStr = rsltStr + couponIssue.getCoupon().getCouponNo() + "/" + couponIssue.getCoupon().getCouponStatCd()+ "/" + couponIssue.getCoupon().getVrEdDt();    
+				}else {
+					rsltStr = rsltStr + "<br>" + couponIssue.getCoupon().getCouponNo() + "/" + couponIssue.getCoupon().getCouponStatCd()+ "/" + couponIssue.getCoupon().getVrEdDt();
+				}
+			}
+		}
+		
+		if(rsltStr.isEmpty()) {
+			return vrEdDt + " 만료(예정)된 쿠폰이 없습니다.";
+		}else {
+			return vrEdDt + " 만료(예정)된 쿠폰정보 <br>" + rsltStr;
+		}
+		
+	}
+	
+	/**
 	 * 유저에게 사용 가능한 쿠폰을 발행
 	 * @param userId
 	 * @return
