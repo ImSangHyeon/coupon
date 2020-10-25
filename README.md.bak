@@ -10,13 +10,13 @@
 **ROOT Page**
 	URL : http://localhost:8080/coupon/
 
-**문제해결 전략**
+##문제해결 전략
 ### 쿠폰번호 생성 방법
  ① 쿠폰번호 사용 가능한 캐릭터 정의 (String[] psblChtrs)
  ② java.Util.Random Class 사용하여 psblChtrs 내에서 사용 가능한 문자열 생성
  ③ 추출된 쿠폰번호중 중복이 존재하는지 체크 (HashMap 사용)
 
-**실행 방법**
+##실행 방법
 #### 순서대로 수행 필요함.
 
 #### 0. 임시 사용자 등록 (id가 "kkoUser1" 인 사용자 ("Lion")을 User 테이블에 등록한다.
@@ -44,6 +44,6 @@
 #### 5. 지급된 쿠폰중 하나를 사용 취소하는 API를 구현하세요. (취소된 쿠폰 재사용 가능)
 > URL : cp/cancleUsedCoupon/{couponNo}
 
-#### 6. 발급된 쿠폰중 당일 만료된 전체 쿠폰 목록을 조회하는 API를 구현하세요. 
+#### 6. 발급된 쿠폰중 당일 만료된 전체 쿠폰 목록을 조회하는 API를 구현하세요. vrEdDt : 조회대상일자
 > URL : cp/getExprdCouponLst/{vrEdDt}
 
