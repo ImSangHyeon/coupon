@@ -11,12 +11,14 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kko.coupon.model.Coupon;
 import com.kko.coupon.model.CouponStatCd;
 import com.kko.coupon.model.User;
+import com.kko.coupon.repository.CouponRepository;
 import com.kko.coupon.repository.UserRepository;
 
 
@@ -26,6 +28,9 @@ public class CouponCtrollerTest {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private CouponRepository couponRepository;
 	
 	final char[] psblChtrs =
 	    {'1','2','3','4','5','6','7','8','9','0'
@@ -45,14 +50,16 @@ public class CouponCtrollerTest {
 		user.setUserId("kkoUser1");
 		user.setPassWord("kkopw");
 		user.setUserNm("Lion");
-		return this.userRegist(user);
+		
+		user = this.userRegist(user);
+		return user.getUserNm() + "닙이 가입완료되었습니다.( " + user.getUserId() + ")";
 		
 	}
 	
 	@PostMapping("user/regist")
-	public String userRegist(User user) {
-		this.userRegstTest();
-		return user.getUserNm() + "닙이 가입완료되었습니다.( " + user.getUserId() + ")";
+	public User userRegist(User user) {
+		user = userRepository.save(user);
+		return user;
 	}
 	
 	@GetMapping("user/login")
@@ -60,10 +67,17 @@ public class CouponCtrollerTest {
 		return user.getUserNm() + "닙이 로그인되었습니다.( " + user.getUserId() + ")";
 	}
 	
-	@GetMapping("cp/crtn")
-	public String crtnCoupon() {
-		List<Coupon> couponLst = new ArrayList<Coupon>();
-		couponLst = this.crtnCouPon("100");
+	@GetMapping("cp/crtn/{cnt}")
+	public String crtnCoupon(@PathVariable String cnt) {
+		List<Coupon> couponLst = new ArrayList<Coupon>(); 
+		couponLst = this.crtnCouPon(cnt);
+		if(couponLst != null) {
+			int inx = 0;
+			inx ++; 
+			for (Coupon coupon : couponLst) {
+				couponRepository.save(coupon);
+			}
+		}
 		return couponLst.size() + " 건의 쿠폰이 발급되었습니다." ;
 	}
 	
@@ -77,9 +91,13 @@ public class CouponCtrollerTest {
 		List<Coupon> cpLst = new ArrayList<Coupon>();
 		String[] couponNoLst = this.crtnCouponNo(totCnt);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD");
-		String curDate = sdf.format(new Date());
 		Calendar cd = Calendar.getInstance();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat ( "yyyy-MM-dd");
+		String curDate = sdf.format(cd.getTime());
+		
+		System.out.println("curDate : " + curDate);
+		
 		cd.add(Calendar.DATE, 100);
 		
 		String vrStDt = curDate;
@@ -89,10 +107,13 @@ public class CouponCtrollerTest {
 			Coupon coupon = new Coupon();
 			coupon.setCouponNo(couponNo);
 			coupon.setCouponStatCd(CouponStatCd.CRTN_CPT);
-			coupon.setVrEdDt(vrStDt);
+			coupon.setVrStDt(vrStDt);
 			coupon.setVrEdDt(vrEdDt);
 			cpLst.add(coupon);
 		}
+		
+		System.out.println(cpLst.get(0));
+		
 		return cpLst;
 	}
 	

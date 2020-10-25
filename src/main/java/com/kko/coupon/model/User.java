@@ -20,16 +20,16 @@ import lombok.NoArgsConstructor;
 @Entity
 public class User {
 	@Id
-	private String UserId;
+	private String userId;
 	
 	@Column(nullable = false, length = 300)
 	private String passWord;
 	
 	@Column(nullable = false, length = 100)
-	private String UserNm;
+	private String userNm;
 	
 	@CreationTimestamp
 	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp InputDate;	//입력일자
+	private Timestamp inputDate;	//입력일자
 	
 }
