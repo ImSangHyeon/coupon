@@ -1,5 +1,4 @@
-package com.kko.coupon.test;
-
+package com.kko.coupon.api;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,63 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.kko.coupon.model.Coupon;
 import com.kko.coupon.model.CouponStatCd;
-import com.kko.coupon.model.User;
-import com.kko.coupon.repository.UserRepository;
 
 
-
-@RestController
-public class CouponCtrollerTest {
-	
-	@Autowired
-	private UserRepository userRepository;
-	
+public class CouponMngImpl implements CouponMng  {
 	final char[] psblChtrs =
 	    {'1','2','3','4','5','6','7','8','9','0'
 	    ,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
 	    };
 	final int psblChtrsCnt = psblChtrs.length;
-	
-	
-	@GetMapping("test/hello")
-	public String hello() {
-		return "<h1>Hello Yimga !!</h1>";
-	}
-	
-	@GetMapping("test/userRegst")
-	public String userRegstTest() {
-		User user = new User();
-		user.setUserId("kkoUser1");
-		user.setPassWord("kkopw");
-		user.setUserNm("Lion");
-		return this.userRegist(user);
-		
-	}
-	
-	@PostMapping("user/regist")
-	public String userRegist(User user) {
-		this.userRegstTest();
-		return user.getUserNm() + "닙이 가입완료되었습니다.( " + user.getUserId() + ")";
-	}
-	
-	@GetMapping("user/login")
-	public String userLogin(User user) {
-		return user.getUserNm() + "닙이 로그인되었습니다.( " + user.getUserId() + ")";
-	}
-	
-	@GetMapping("cp/crtn")
-	public String crtnCoupon() {
-		List<Coupon> couponLst = new ArrayList<Coupon>();
-		couponLst = this.crtnCouPon("100");
-		return couponLst.size() + " 건의 쿠폰이 발급되었습니다." ;
-	}
 	
 	/**
 	 * (신규) 쿠폰 객체를 cnt 만큼 생성하여 리턴함
@@ -91,7 +44,6 @@ public class CouponCtrollerTest {
 			coupon.setCouponStatCd(CouponStatCd.CRTN_CPT);
 			coupon.setVrEdDt(vrStDt);
 			coupon.setVrEdDt(vrEdDt);
-			cpLst.add(coupon);
 		}
 		return cpLst;
 	}
@@ -112,7 +64,7 @@ public class CouponCtrollerTest {
 		int i = 0;
 		while (inx < cnt) {
 			StringBuffer buf = new StringBuffer(16);
-			for (i= 19; i > 0; i--) {
+			for (i= 8; i > 0; i--) {
 				buf.append(psblChtrs[rnd.nextInt(psblChtrsCnt)]);
 			}
 			String couponnum = buf.toString();
@@ -127,5 +79,3 @@ public class CouponCtrollerTest {
 		return couponNoarr;
 	}
 }
-
-;

@@ -28,7 +28,7 @@ public class Coupon {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int couponId;		//쿠폰ID
 	
-	@Column(nullable = false, length = 30)
+	@Column(unique = true, nullable = false, length = 30) 
 	private String couponNo;	//쿠폰번호
 	
 	@Column(nullable = false, length = 10)
@@ -37,7 +37,7 @@ public class Coupon {
 	@Column(nullable = false, length = 10)
 	private String vrEdDt;		//유효종료일자
 	
-	@Column(nullable = false, length = 10)
+	@Column(nullable = true, length = 10)
 	private String issueDate;	//발급일자
 	
 	@Enumerated(EnumType.STRING)
